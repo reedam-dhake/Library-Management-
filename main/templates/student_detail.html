@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if student.user.id == request.user.id or user.is_staff %}
+    <div class="container bg bg-white">
+
+    <div class="container-fliud">
+    <div class="wrapper row">
+        <div class="preview col-6">
+
+            <div class="preview-pic tab-content">
+                <div class="tab-pane active  my-auto mx-auto" id="pic-1">
+                    {% if student.image %}
+                    <img src="{{ student.image.url }}" height="200" width="200"/>
+                    {% endif %}
+                </div>
+            </div>
+
+
+        </div>
+        <div class="details col-6">
+            <h2>Username: {{ student.user.username }}</h2>
+            <p><strong>Name: </strong>{{ student.user.first_name }} {{ student.user.last_name }}</p>
+            <p><strong>Email: </strong>{{ student.user.email }}</p>
+            <p><strong>Books due: </strong> {{ student.total_books_due }}</p>
+            {% if user.is_superuser %}
+                {% if student.user.is_staff and not student.user.is_superuser %}
+                <a class="btn btn-danger" href="{% url 'unmake-staff' pk=student.pk %}">Delete Librarian Access</a>
+                {% elif student.user.is_superuser %}
+                <h2><strong>Has Admin rights.</strong></h2>
+                {% else %}
+                <a class="btn btn-primary" href="{% url 'make-staff' pk=student.pk %}">Make Librarian</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <hr>
+    </div>
+    <hr>
+    <hr>
+    {% if books %}
+
+        <div class="row mx-auto">
+            {% for book in books %}
+
+
+                <div class="mx-3 col-md-4 col-lg-3 mb-4 shadow p-2 mb-4 bg-white rounded">
+                    <div class="card mx-auto text-center ">
+                        {% if book.book.image %}
+                        <img class="card-img-top" src="{{ book.book.image.url }}" alt="Sample Title" width="400px"
+                             height="400px">
+                        {% endif %}
+                        <div class="card-body">
+                            <h4 class="card-title"><a href="{% url 'book-detail' pk=book.book.pk %}">{{book.book.name}}</a>
+                                <h5>({{book.book.author}})</h5>
+                                <h6>Due Date: {{book.return_date}}</h6>
+                            </h4>
+                        {% if student.user.id == request.user.id %}
+                            <a class="btn btn-success" href="{% url 'return' pk=book.book.id %}">Return</a>
+                        {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <p>There are no books borrowed.</p>
+    {% endif %}
+
+{% endif %}
+{% endblock %}

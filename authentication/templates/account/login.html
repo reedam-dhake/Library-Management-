@@ -1,0 +1,105 @@
+{% extends 'account/base_card.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Sign In" %}{% endblock %}
+
+{% block card-header %}
+    <h3>{% trans "Sign In" %}</h3>
+{% endblock %}
+
+{% block card-body %}
+
+    <form method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            {% with field=form.login %}{% include "account/form_field.html" %}{% endwith %}
+        </div>
+        <br>
+        <div class="form-group">
+            {% with field=form.password %}{% include "account/form_field.html" %}{% endwith %}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-outline-primary">{% trans "Sign In" %}</button>
+        <br>
+    </form>
+
+{% endblock %}
+
+{% block card-footer %}
+    <p>{% trans "Don't have an account?" %} <a href="{{ signup_url }}">{% trans "Sign Up" %}</a></p>
+    <small>
+        <a class="text-muted" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+
+    </small>
+    <br>
+    <br>
+    {% load socialaccount %}
+
+    {% get_providers as socialaccount_providers %}
+    
+    {% if socialaccount_providers %}
+      
+      <p>{% blocktrans with site.name as site_name %}<small>Or sign in with one of your third party accounts:</small>{% endblocktrans %}</p>
+      <ul class="social_providers_list">
+      {% for provider in socialaccount_providers %}
+      <div class="container">
+        <a class="btn btn-social btn-{{provider.name|lower}}" 
+         href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"><i class="fa fa-{{provider.name|lower}} fa-fw" id="social_icon">
+            <style>
+              .btn-facebook {
+                  color: #fff;
+                  background-color: #3b5998;
+                  border-color: rgba(0, 0, 0, 0.2);
+              }
+              .btn-google {
+                  color: black;
+                  background-color: white;
+                  border-color: rgba(0, 0, 0, 0.2);
+              }
+              .btn-facebook:hover {
+                color: #fff;
+              }
+              .btn-github:hover {
+                color: #fff;
+              }
+              .btn-github {
+                  color: white;
+                  background-color: #211f1f;
+                  border-color: rgba(0, 0, 0, 0.2);
+              }
+              .btn-social {
+                  position: relative;
+                  padding-left: 44px;
+                  text-align: left;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+              }
+              .fa-google {
+                  background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
+                  -webkit-background-clip: text;
+                  background-clip: text;
+                  color: transparent;
+                  
+              }
+
+              .btn-social :first-child {
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                  bottom: 0;
+                  width: 40px;
+                  padding: 7px;
+                  font-size: 1.6em;
+                  text-align: center;
+                  border-right: 1px solid rgba(0, 0, 0, 0.2);
+              }
+            </style>
+         </i>  Sign in with {{provider.name}}</a><br><br>
+      </div>
+      {% endfor %}
+      </ul>
+    {% endif %}
+</div>
+{% endblock %}

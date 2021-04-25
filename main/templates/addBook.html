@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title  %}Add New Book{% endblock %}
+{% block content %}
+{% if user.is_staff %}
+	<h1>Add Book</h1><br>
+	<div class="form-floating mb-3">
+		<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{form.media}}
+			{{form.as_p}}
+			<br/>
+			<button type="submit", name="save", class = "btn btn-success">Add Book</button>
+		</form>
+	</div>
+{% endif %}
+{% endblock %}

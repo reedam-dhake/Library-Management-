@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_superuser %}
+   <center> <form class="form" id="searchform" action="{% url 'search_s' %}" method="get">
+    <div class="form-group">
+    <input type="text" class="col-5  form-control-lg"  placeholder="Enter student username or email" name="q" type="text"/>
+    <button type="button"  class="btn btn-success form-control-lg" onclick="searchform.submit()">Search</button>
+        </div>
+</form>
+   </center><br><br>
+    <div class="bg bg-white">
+        {% for s in students %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><strong><a href="{% url 'student_detail' pk=s.id %}">{{ s.user.username }}</a></strong></h5>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

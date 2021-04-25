@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load ratings %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title  %}Book{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-5">
+                        {% if object.image %}
+                            <img src="{{ object.image.url }}" height="500" width="400"/>
+                        {% endif %}
+                        <br><br>
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title"><strong>Ratings:</strong></h2>
+                                <p class="card-text">
+                                        <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+                                        <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+                                        {% ratings object %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text">
+                                        Number of available copies: {{object.available_copies}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title"><strong>Title:</strong></h2>
+                                <p class="card-text">{{object.name}}</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><strong>Author(s):</strong></h5>
+                                <p class="card-text">{{object.author}}</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><strong>Summary:</strong></h5>
+                                <p class="card-text">{{object.summary}}</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><strong>Pages: </strong></h5>
+                                <p class="card-text">{{object.pages}}</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><strong>Publisher: </strong></h5>
+                                <p class="card-text">{{object.publisher}}</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><strong>Year: </strong></h5>
+                                <p class="card-text">{{object.year}}</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><strong>ISBN: </strong></h5>
+                                <p class="card-text">{{object.isbnNumber}}</p>
+                            </div>
+                        </div>
+                        <br>
+                        {% if user.is_authenticated %}
+                            <div class="row justify-content-space-evenly">
+                                <div class="col-md-12 text-center">
+                                    {% if user.is_staff %}
+                                    <a href="{% url 'edit-detail' pk=object.pk %}">
+                                        <button type="submit", name="save", class = "btn btn-success"> Edit </button>
+                                    </a>
+                                    <a href="{% url 'delete-book' pk=object.pk %}">
+                                        <button type="submit", name="save", class = "btn btn-danger"> DELETE </button>
+                                    </a> <br> <br>
+                                    {% endif %}
+                                    {% if object.available_copies %}
+                                        {% if borrow %}
+                                            <a class="btn btn-success" href="{{object.pdf.url}}">View PDF</a>
+                                            <a class="btn btn-dark" href="{% url 'return' pk=object.id %}">Return</a>
+                                            <a class="btn btn-primary" href="{% url 'extend' pk=object.id %}">Extend Due Date</a>
+                                        {% else %}
+                                            <a class="btn btn-primary" href="{% url 'request_issue' pk=object.id %}">Borrow</a>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if borrow and borrow.waiting_list %}
+                                            <a class="btn btn-primary" href="#">Already in waiting list</a>
+                                        {% else %}
+                                            <a class="btn btn-primary" href="{% url 'request_issue' pk=object.id %}">Waitlist</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 card mb-4  mt-3 ">
+        <div class="card-body">
+            <h2>{{ comments.count }} comments</h2>
+
+            {% for comment in comments %}
+                <div class="comments" style="padding: 10px;">
+                    <p class="font-weight-bold">
+                        {{ comment.user.username }}
+                        <span class=" text-muted font-weight-normal">
+                            {{ comment.created_on }}
+                        </span>
+                    </p>
+                    {{ comment.body | linebreaks }}
+                    {% if user.is_superuser %}
+                    <a href="{% url 'delete-comment' pk=comment.pk %}">
+                    <button type="submit", name="save", class = "btn btn-danger"> DELETE </button>
+                    </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+        <div class="col-md-8 card mb-4  mt-3 ">
+            <div class="card-body">
+                {% if new_comment %}
+                    <div class="alert alert-success" role="alert">
+                        Comment posted succesfully.
+                    </div>
+                {% else %}
+                    <h3>Leave a comment</h3>
+                    <div class="form-floating mb-3">
+                        <form method="post" style="margin-top: 1.3em;">
+                            {% csrf_token %}
+                            {{ comment_form.as_p }}
+                            <button type="submit" class="btn btn-success  btn-lg">Submit</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

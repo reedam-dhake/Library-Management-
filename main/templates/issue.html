@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title  %}Issue{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class=" bg bg-white">
+<h1>
+{{ message }}
+
+</h1>
+</div>
+{% endif %}
+{% endblock %}

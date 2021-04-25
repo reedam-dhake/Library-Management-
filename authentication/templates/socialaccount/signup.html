@@ -1,0 +1,33 @@
+{% extends "socialaccount/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Sign Up" %}</h1>
+
+<p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to
+{{site_name}}. As a final step, please complete the following form:{% endblocktrans %}</p>
+
+<form class="container-fluid" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+  {% csrf_token %}
+  <div class="form-group">
+  {% with field=form.email %}{% include "account/form_field.html" %}{% endwith %}
+  </div><br>
+  <div class="form-group">
+  {% with field=form.username %}{% include "account/form_field.html" %}{% endwith %}
+  </div><br>
+  <div class="form-group">
+  {% with field=form.first_name %}{% include "account/form_field.html" %}{% endwith %}
+  </div><br>
+  <div class="form-group">
+  {% with field=form.last_name %}{% include "account/form_field.html" %}{% endwith %}
+  </div><br>
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}<br>
+  <button class="btn btn-outline-primary" type="submit">{% trans "Sign Up" %} &raquo;</button>
+</form>
+
+{% endblock %}
