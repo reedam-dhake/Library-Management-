@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import django_heroku
+from decouple import config
+import dj_database_url
 from pathlib import Path
 import os
 
@@ -50,8 +52,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.github',
-    'sslserver',
-    'wkhtmltopdf',
 
 ]
 
@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -144,7 +145,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static'),
     )
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -211,3 +212,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'resniksharma@outlook.com'
 EMAIL_HOST_PASSWORD = 'qwerty@1234'
 DEFAULT_FROM_EMAIL = 'resniksharma@outlook.com'
+
+django_heroku.settings(locals())
