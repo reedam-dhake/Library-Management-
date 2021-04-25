@@ -141,9 +141,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': dn16ekei9,
-    'API_KEY': 392467162814363,
-    'API_SECRET': RrQ8XMQVrL63tLo4GBuIjk0lGSo,
+    'CLOUD_NAME': 'dn16ekei9',
+    'API_KEY': '392467162814363',
+    'API_SECRET': 'RrQ8XMQVrL63tLo4GBuIjk0lGSo',
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
