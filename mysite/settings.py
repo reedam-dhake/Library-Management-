@@ -209,8 +209,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.office365.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'resniksharma@outlook.com'
+EMAIL_HOST_USER = 'librarymanagementsys@outlook.com'
 EMAIL_HOST_PASSWORD = 'qwerty@1234'
-DEFAULT_FROM_EMAIL = 'resniksharma@outlook.com'
+DEFAULT_FROM_EMAIL = 'librarymanagementsys@outlook.com'
 
 django_heroku.settings(locals())
