@@ -4,6 +4,10 @@ Library management system
 Heroku deployed website url :
 https://redlib.herokuapp.com/
 
+On Heroku I have uploaded three books but you will have to upload the image and pdf for the book from the media folder of this repo using edit book after login as heroku deletes the media files each time the dyno is deactivated (which is 30 min for free account on heroku). I tried to install cloudinary but it created more errors so i reverted back. All other platforms were asking for creditcard to continue so I didn't do it.
+
+The above problem will not come on local machine.
+
 To run on local machine setup virtual environment and then inside the git folder do :
 
 `pip install -r requirements.txt`
@@ -33,4 +37,4 @@ Do try this for Google, Github and the normal Signup. Also do provide a real ema
 
 Also I would suggest to try to login using social on the deployed site only as i had changed the secret keys.
 
-On Heroku I have uploaded one book but you will have to upload the image for the book again using edit book after login as there is some bug with the media files and each time the dyno is deactivated (which is 30 min for free account on heroku) it deletes the media files. I tried to install cloudinary but it created more errors so i reverted back
+
