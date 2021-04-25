@@ -7,7 +7,7 @@ from django.dispatch import receiver
 class BookName(models.Model):
 	name = models.CharField(max_length=200)
 	pages = models.IntegerField()
-	isbnNumber = models.IntegerField()
+	isbnNumber = models.CharField(max_length=14)
 	publisher = models.CharField(max_length=200)
 	author = models.CharField(max_length=200)
 	year = models.IntegerField()
